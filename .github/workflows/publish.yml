@@ -37,6 +37,9 @@ jobs:
         name: Build
         run: cargo build --release --locked
       -
+        name: Gathering compiled binaries
+        run: find ./target/release -maxdepth 1 -type f | grep -v .cargo-lock | grep -v .d$
+      -
         name: Upload binaries to release
         uses: actions/upload-artifact@v2
         with:
