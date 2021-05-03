@@ -16,15 +16,23 @@ pub struct CompileCommand {
 
 impl Command for CompileCommand {
     fn execute(&self, app: &Application) -> Result<(), KeyManagerError> {
-        let mut file = fs::File::create(&self.out_file)
-            .map_err(|e| KeyManagerError::IoError(e))?;
+        let groups = app.get_groups()?;
 
-        for group in app.get_groups()? {
-            for item in group.items()? {
-                let mut key = fs::read(item).map_err(|e| KeyManagerError::IoError(e))?;
-                key.push(b'\n');
+        if groups.is_empty() {
+            println!("No keys to compile");
+        } else {
+            let mut file = fs::File::create(&self.out_file)
+                .map_err(|e| KeyManagerError::IoError(e))?;
 
-                file.write(key.as_slice()).map_err(|e| KeyManagerError::IoError(e))?;
+            for group in groups {
+                for item in group.items()? {
+                    let mut key = fs::read(item)
+                        .map_err(|e| KeyManagerError::IoError(e))?;
+
+                    key.push(b'\n');
+
+                    file.write(key.as_slice()).map_err(|e| KeyManagerError::IoError(e))?;
+                }
             }
         }
 

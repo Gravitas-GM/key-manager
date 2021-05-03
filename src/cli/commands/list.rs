@@ -25,16 +25,17 @@ impl Command for ListCommand {
 fn display_group(group: Group) -> Result<(), KeyManagerError> {
     let items = group.items()?;
 
-    println!("{} ({} key{})", &group.name, items.len(), match items.len() {
-        1 => "",
-        _ => "s",
-    });
+    if items.len() == 0 {
+        println!("Group named {} does not exist or is empty", group.name);
+    } else {
+        println!("{} ({} key(s))", &group.name, items.len());
 
-    for item in items {
-        println!("  - {}", item.file_name().unwrap().to_str().unwrap());
+        for item in items {
+            println!("  - {}", item.file_name().unwrap().to_str().unwrap());
+        }
+
+        println!();
     }
-
-    println!();
 
     Ok(())
 }

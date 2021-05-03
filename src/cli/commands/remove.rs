@@ -15,21 +15,39 @@ impl Command for RemoveCommand {
         let group = app.get_group(&self.group);
 
         if let Some(key_name) = &self.key_name {
-            let res = fs::remove_file(group.get_path(key_name))
-                .map_err(|e| KeyManagerError::IoError(e));
+            let path = group.get_path(key_name);
 
-            println!("Deleted 1 key named {}", key_name);
+            if !path.exists() {
+                println!("Specified key does not exist");
 
-            res
+                Ok(())
+            } else {
+                let res = fs::remove_file(group.get_path(key_name))
+                    .map_err(|e| KeyManagerError::IoError(e));
+
+                if res.is_ok() {
+                    println!("Deleted 1 key named {}", key_name);
+                }
+
+                res
+            }
         } else {
             let key_count = group.items()?.len();
 
-            let res = fs::remove_dir_all(group.path)
-                .map_err(|e| KeyManagerError::IoError(e));
+            if key_count == 0 {
+                println!("Group named {} does not exist or is empty", group.name);
 
-            println!("Deleted {} key(s)", key_count);
+                Ok(())
+            } else {
+                let res = fs::remove_dir_all(group.path)
+                    .map_err(|e| KeyManagerError::IoError(e));
 
-            res
+                if res.is_ok() {
+                    println!("Deleted {} key(s)", key_count);
+                }
+
+                res
+            }
         }
     }
 }

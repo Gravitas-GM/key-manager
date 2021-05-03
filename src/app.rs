@@ -45,6 +45,10 @@ impl Application {
 }
 
 fn list_dir<T: AsRef<Path>>(base: T) -> Result<Vec<PathBuf>, KeyManagerError> {
+    if !base.as_ref().exists() {
+        return Ok(vec![]);
+    }
+
     let mut res = fs::read_dir(base)
         .map_err(|e| KeyManagerError::IoError(e))?
         .map(|res| {
