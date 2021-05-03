@@ -38,6 +38,7 @@ jobs:
         run: cargo build --release --locked
       -
         name: Gathering compiled binaries
+        shell: bash
         run: find ./target/release -maxdepth 1 -type f | grep -v .cargo-lock | grep -v .d$
       -
         name: Upload binaries to release
