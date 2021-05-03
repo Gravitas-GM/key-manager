@@ -1,6 +1,6 @@
 [package]
 name = "key-manager"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Tyler Lartonoix <lord.codemonkey@gmail.com>"]
 edition = "2018"
 
