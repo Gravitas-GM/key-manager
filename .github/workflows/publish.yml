@@ -20,12 +20,12 @@ jobs:
             name: linux
             os: ubuntu-latest
             artifact_name: target/release/<name>
-            asset_name: <name>-linux
+            asset_name: key-manager-linux
           -
             name: windows
             os: windows-latest
-            artifact_name: target/release/<name>.exe
-            asset_name: <name>-windows
+            artifact_name: target/release/key-manager.exe
+            asset_name: key-manager-windows
     steps:
       - uses: actions/checkout@v1
       -
