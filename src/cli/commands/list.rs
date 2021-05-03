@@ -5,6 +5,7 @@ use crate::app::{Application, Group};
 
 #[derive(Debug, StructOpt)]
 pub struct ListCommand {
+    /// If provided, only keys belonging to the named group will be displayed.
     pub group: Option<String>,
 }
 

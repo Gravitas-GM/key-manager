@@ -17,10 +17,19 @@ pub trait Command {
 #[derive(Debug, StructOpt)]
 #[structopt(name = "SSH Keyserver Manager", about = "Manages keys to be served by a centralized keyserver.")]
 pub enum Cli {
+    /// Adds a new public key to the registry.
     Add(AddCommand),
+
+    /// Compiles all known public keys into an sshd-compatible authorized keys file.
     Compile(CompileCommand),
+
+    /// Displays information on the current dirty state of the application; intended for debug purposes.
     IsDirty(IsDirtyCommand),
+
+    /// Removes a key or group from the registry.
     Remove(RemoveCommand),
+
+    /// Lists known public keys.
     List(ListCommand),
 }
 

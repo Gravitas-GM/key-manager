@@ -6,7 +6,11 @@ use std::fs;
 
 #[derive(Debug, StructOpt)]
 pub struct RemoveCommand {
+    /// The target group.
     group: String,
+
+    /// The name of the public key that should be removed. If this argument is not specified, the
+    /// entire group will be removed instead.
     key_name: Option<String>,
 }
 

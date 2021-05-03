@@ -6,8 +6,13 @@ use crate::error::KeyManagerError;
 
 #[derive(Debug, StructOpt)]
 pub struct AddCommand {
+    /// The group name to store the new key under.
     group: String,
+
+    /// The new public key.
     public_key: String,
+
+    /// The public key's name; if not provided, the public key's comment value will be used instead.
     key_name: Option<String>,
 }
 

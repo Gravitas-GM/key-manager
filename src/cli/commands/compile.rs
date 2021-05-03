@@ -10,9 +10,15 @@ use crate::error::KeyManagerError;
 
 #[derive(Debug, StructOpt)]
 pub struct CompileCommand {
+    /// Output will be written to this path.
     #[structopt(parse(from_os_str))]
     out_file: PathBuf,
 
+    /// Forces output of the compiled keys file.
+    ///
+    /// By default, the keys file will only be regenerated if a key has been added or removed since
+    /// `compile` was last run. This flag can be used to override this behavior and force the
+    /// keys file to be regenerated.
     #[structopt(long, short)]
     force: bool,
 }
