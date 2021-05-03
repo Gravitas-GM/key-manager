@@ -19,7 +19,7 @@ jobs:
           -
             name: linux
             os: ubuntu-latest
-            artifact_name: target/release/<name>
+            artifact_name: target/release/key-manager
             asset_name: key-manager-linux
           -
             name: windows
