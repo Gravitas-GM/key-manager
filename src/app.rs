@@ -30,17 +30,47 @@ impl Application {
     }
 
     pub fn get_groups(&self) -> Result<Vec<Group>, KeyManagerError> {
-        let paths = list_dir(self.project_dir.data_dir());
+        let mut paths = list_dir(self.project_dir.data_dir())?;
 
-        match paths {
-            Ok(paths) => Ok(paths.iter()
-                .map(|path| Group {
-                    path: path.to_owned(),
-                    name: path.file_name().unwrap().to_str().unwrap().to_owned(),
+        Ok(
+            paths.drain(..)
+                .filter_map(|path| {
+                    if path.is_dir() {
+                        Some(Group {
+                            name: path.file_name().unwrap().to_str().unwrap().to_owned(),
+                            path,
+                        })
+                    } else {
+                        None
+                    }
                 })
-                .collect::<Vec<_>>()),
-            Err(e) => Err(e),
+                .collect()
+        )
+    }
+
+    pub fn mark_dirty(&self) -> Result<(), KeyManagerError> {
+        match fs::OpenOptions::new().create(true).write(true).open(self.get_dirty_path()) {
+            Ok(_) => Ok(()),
+            Err(e) => Err(KeyManagerError::IoError(e)),
         }
+    }
+
+    pub fn clear_dirty(&self) -> Result<(), KeyManagerError> {
+        let path = self.get_dirty_path();
+
+        if path.exists() {
+            fs::remove_file(path).map_err(|e| KeyManagerError::IoError(e))?;
+        }
+
+        Ok(())
+    }
+
+    pub fn is_dirty(&self) -> bool {
+        self.get_dirty_path().exists()
+    }
+
+    fn get_dirty_path(&self) -> PathBuf {
+        self.project_dir.data_dir().join(".dirty")
     }
 }
 
@@ -84,7 +114,13 @@ impl Group {
     }
 
     pub fn items(&self) -> Result<Vec<PathBuf>, KeyManagerError> {
-        list_dir(&self.path)
+        let mut paths = list_dir(&self.path)?;
+
+        Ok(
+            paths.drain(..)
+                .filter(|path| path.is_file())
+                .collect()
+        )
     }
 
     pub fn get_path(&self, key_name: &str) -> PathBuf {

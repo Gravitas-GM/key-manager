@@ -23,6 +23,9 @@ impl Command for AddCommand {
             None => parsed_key.comment.as_ref().ok_or(KeyManagerError::PublicKeyMissingComment)?,
         };
 
-        app.get_group(&self.group).put(key_name, &self.public_key)
+        app.get_group(&self.group).put(key_name, &self.public_key)?;
+        app.mark_dirty()?;
+
+        Ok(())
     }
 }

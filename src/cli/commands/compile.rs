@@ -12,10 +12,17 @@ use crate::error::KeyManagerError;
 pub struct CompileCommand {
     #[structopt(parse(from_os_str))]
     out_file: PathBuf,
+
+    #[structopt(long, short)]
+    force: bool,
 }
 
 impl Command for CompileCommand {
     fn execute(&self, app: &Application) -> Result<(), KeyManagerError> {
+        if !self.force && !app.is_dirty() {
+            return Ok(());
+        }
+
         let groups = app.get_groups()?;
 
         if groups.is_empty() {
@@ -35,6 +42,8 @@ impl Command for CompileCommand {
                 }
             }
         }
+
+        app.clear_dirty()?;
 
         Ok(())
     }

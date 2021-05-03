@@ -26,6 +26,8 @@ impl Command for RemoveCommand {
                     .map_err(|e| KeyManagerError::IoError(e));
 
                 if res.is_ok() {
+                    app.mark_dirty()?;
+
                     println!("Deleted 1 key named {}", key_name);
                 }
 
@@ -43,6 +45,8 @@ impl Command for RemoveCommand {
                     .map_err(|e| KeyManagerError::IoError(e));
 
                 if res.is_ok() {
+                    app.mark_dirty()?;
+
                     println!("Deleted {} key(s)", key_count);
                 }
 

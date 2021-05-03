@@ -6,6 +6,7 @@ use crate::cli::commands::add::AddCommand;
 use crate::cli::commands::list::ListCommand;
 use crate::cli::commands::remove::RemoveCommand;
 use crate::cli::commands::compile::CompileCommand;
+use crate::cli::commands::is_dirty::IsDirtyCommand;
 
 mod commands;
 
@@ -18,6 +19,7 @@ pub trait Command {
 pub enum Cli {
     Add(AddCommand),
     Compile(CompileCommand),
+    IsDirty(IsDirtyCommand),
     Remove(RemoveCommand),
     List(ListCommand),
 }
@@ -27,6 +29,7 @@ impl Command for Cli {
         match self {
             Self::Add(command) => command.execute(app),
             Self::Compile(command) => command.execute(app),
+            Self::IsDirty(command) => command.execute(app),
             Self::List(command) => command.execute(app),
             Self::Remove(command) => command.execute(app),
         }
