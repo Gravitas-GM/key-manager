@@ -19,12 +19,12 @@ jobs:
           -
             name: linux
             os: ubuntu-latest
-            atrifact_name: target/release/<name>
+            artifact_name: target/release/<name>
             asset_name: <name>-linux
           -
             name: windows
             os: windows-latest
-            atrifact_name: target/release/<name>.exe
+            artifact_name: target/release/<name>.exe
             asset_name: <name>-windows
     steps:
       - uses: actions/checkout@v1
