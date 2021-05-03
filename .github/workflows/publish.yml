@@ -23,7 +23,7 @@ jobs:
             asset_name: <name>-linux
           -
             name: windows
-            os: ubuntu-latest
+            os: windows-latest
             atrifact_name: target/release/<name>.exe
             asset_name: <name>-windows
     steps:
